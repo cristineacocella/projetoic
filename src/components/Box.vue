@@ -8,7 +8,9 @@
         <div class="search-box">
           <input type="search" name="search" class="search" />
         </div>
-        <div class="table"></div>
+        <div class="table">
+          <vue-csv-input name="Relatorio_cadop"> </vue-csv-input>
+        </div>
       </div>
     </div>
   </div>

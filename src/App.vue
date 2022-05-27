@@ -1,17 +1,21 @@
 <template>
-  <Header />
-  <Box />
+  <vue-csv-import v-model="csv">
+    <Header />
+    <Box />
+  </vue-csv-import>
 </template>
 
 <script>
 import Header from "./components/Header.vue";
 import Box from "./components/Box.vue";
+import { VueCsvImport } from "vue-csv-import";
 
 export default {
   name: "App",
   components: {
     Header,
     Box,
+    VueCsvImport,
   },
 };
 </script>
