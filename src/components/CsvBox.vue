@@ -19,7 +19,7 @@ import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { AgGridVue } from "ag-grid-vue3";
 import { reactive, onMounted, ref } from "vue";
-import { useFile } from "@vue-reactivity/fs";
+// import { useFile } from "@vue-reactivity/fs";
 
 export default {
   name: "App",
@@ -36,43 +36,45 @@ export default {
 
     let rowData = reactive({});
 
-    let columnDefs = reactive({});
+    const columnDefs = reactive({
+      value: [{ field: "make" }, { field: "model" }, { field: "price" }],
+    });
 
     const defaultColDef = {
       sortable: true,
       filter: true,
     };
 
-    const csvJSON = (csv) => {
-      const lines = csv.split("\n");
-      console.log(lines);
-      const result = [];
-      const headers = lines[0].split(";");
-      console.log(headers);
-      for (let i = 1; i < lines.length; i++) {
-        if (!lines[i]) continue;
-        const obj = {};
-        const currentline = lines[i].split(";");
+    // const csvJSON = (csv) => {
+    //   const lines = csv.split("\n");
+    //   console.log(lines);
+    //   const result = [];
+    //   const headers = lines[0].split(";");
+    //   console.log(headers);
+    //   for (let i = 1; i < lines.length; i++) {
+    //     if (!lines[i]) continue;
+    //     const obj = {};
+    //     const currentline = lines[i].split(";");
 
-        for (let j = 0; j < headers.length; j++) {
-          obj[headers[j]] = currentline[j];
-        }
-        result.push(obj);
-      }
+    //     for (let j = 0; j < headers.length; j++) {
+    //       obj[headers[j]] = currentline[j];
+    //     }
+    //     result.push(obj);
+    //   }
 
-      return result;
-    };
+    //   return result;
+    // };
 
     // const fs = require("fs");
     // const csv = require("fast-csv");
 
     // const stream = fs.createReadStream("../assets/Relatorio_cadop.csv");
 
-    const csv = useFile("../assets/Relatorio_cadop.csv");
-    const csvJason = csvJSON(csv);
+    // const csv = useFile("../assets/Relatorio_cadop.csv");
+    // const csvJason = csvJSON(csv);
 
     onMounted(() => {
-      fetch(csvJason)
+      fetch("https://www.ag-grid.com/example-assets/row-data.json")
         .then((result) => result.json())
         .then((remoteRowData) => (rowData.value = remoteRowData));
     });
