@@ -9,7 +9,7 @@
           <input type="search" name="search" class="search" />
         </div>
         <div class="table">
-          <vue-csv-input name="Relatorio_cadop"> </vue-csv-input>
+          <CsvBox />
         </div>
       </div>
     </div>
@@ -17,10 +17,10 @@
 </template>
 
 <script>
+import CsvBox from "./CsvBox.vue";
 export default {
-  name: "BoxBox",
-  props: {
-    msg: String,
+  components: {
+    CsvBox,
   },
 };
 </script>

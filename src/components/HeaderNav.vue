@@ -13,7 +13,6 @@
 
 <script>
 export default {
-  name: "HeaderHeader",
   props: {
     msg: String,
   },
