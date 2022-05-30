@@ -1,99 +1,66 @@
 <template>
-  <div id="vue-root">
-    <DxDataGrid :columns="columns" :show-borders="true" :data-source="Report" />
-    <!-- <ag-grid-vue
-      style="height: 500px"
-      :columnDefs="columnDefs.value"
-      :rowData="rowData.value"
-      :defaultColDef="defaultColDef"
-      rowSelection="multiple"
-      animateRows="true"
-      @cell-clicked="cellWasClicked"
-      @grid-ready="onGridReady"
-    >
-    </ag-grid-vue> -->
-  </div>
+  <ag-grid-vue
+    style="width: 100%; height: 50%"
+    class="ag-theme-alpine"
+    :columnDefs="columnDefs"
+    :rowData="rowData"
+  >
+  </ag-grid-vue>
 </template>
+
 <script>
-// import "ag-grid-community/dist/styles/ag-grid.css";
-// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-// import { AgGridVue } from "ag-grid-vue3";
-import Report from "../assets/csvjson.json";
-import DxDataGrid from "devextreme-vue/data-grid";
-import { reactive, onMounted, ref } from "vue";
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+import { AgGridVue } from "ag-grid-vue3";
+import Json from "../assets/csvjson.json";
+
 export default {
-  name: "App",
   components: {
-    DxDataGrid,
-    Report,
+    AgGridVue,
   },
+
   data() {
     return {
-      json: "",
-      columns: ["A"],
-      report: Report,
+      json: Json,
+      columnDefs: [],
+      rowData: [],
     };
   },
-  setup() {
-    const gridApi = ref(null);
-    const onGridReady = (params) => {
-      gridApi.value = params.api;
-    };
-    let rowData = reactive({});
-    const columnDefs = reactive({
-      value: [{ field: "make" }, { field: "model" }, { field: "price" }],
-    });
-    const defaultColDef = {
-      sortable: true,
-      filter: true,
-    };
-    // const fs = require("fs");
-    // const csv = require("fast-csv");
-    // const stream = fs.createReadStream("../assets/Relatorio_cadop.csv");
-    // const csv = useFile("../assets/Relatorio_cadop.csv");
-    // const csvJason = csvJSON(csv);
-    onMounted(() => {
-      fetch(this.json)
-        .then((result) => result.json())
-        .then((remoteRowData) => (rowData.value = remoteRowData));
-    });
-    return {
-      onGridReady,
-      columnDefs,
-      rowData,
-      defaultColDef,
-      cellWasClicked: (event) => {
-        // Example of consuming Grid Event
-        console.log("cell was clicked", event);
-      },
-    };
+
+  mounted() {
+    // esta executando a função de criação das colunas e das linhas
+    this.colunas();
+    this.conteudo();
   },
+
   methods: {
-    csvJSON(csv) {
-      const lines = csv.split("\n");
-      console.log(lines);
-      const result = [];
-      const headers = lines[0].split(";");
-      console.log(headers);
-      for (let i = 1; i < lines.length; i++) {
-        if (!lines[i]) continue;
-        const obj = {};
-        const currentline = lines[i].split(";");
-        for (let j = 0; j < headers.length; j++) {
-          obj[headers[j]] = currentline[j];
-        }
-        result.push(obj);
-        return result;
+    colunas() {
+      let chaves = [];
+      let nomeColuna = new Object();
+      // pega a quantidade de chaves que o objeto tem e joga na lista chaves
+      for (let x in this.json[0]) {
+        chaves.push(x);
+      }
+
+      //cria um objeto e da pra ele o cabeçalho e o nome dos campo de acordo com a lista de chaves
+      for (let i = 0; i <= chaves.length; i++) {
+        nomeColuna = {};
+        nomeColuna.headerName = chaves[i];
+        nomeColuna.field = chaves[i];
+        this.columnDefs.push(nomeColuna);
+      }
+    },
+
+    conteudo() {
+      const data = JSON.stringify(Json);
+      const format = JSON.parse(data);
+
+      for (let i = 0; i <= format.length - 1; i++) {
+        this.rowData.push(format[0]);
       }
     },
   },
-  mounted() {
-    this.json = "../assets/csvjson.json";
-    console.log(this.json);
-  },
 };
 </script>
-<style scoped></style>
 
-// style="width: 500px; height: 200px" // class="ag-theme-alpine" //
-:columnDefs="columnDefs" // :rowData="rowData"
+<style scoped></style>
